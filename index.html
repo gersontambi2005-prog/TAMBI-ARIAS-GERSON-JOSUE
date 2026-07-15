@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quito Coffee Roasters - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Botón Flotante de Modo Nocturno (Esquina inferior derecha) -->
+    <button id="dark-mode-toggle" class="dark-mode-btn" aria-label="Cambiar modo de luz">⚡</button>
+
+    <header>
+        <nav aria-label="Navegación principal">
+            <div class="logo">Quito Coffee Roasters</div>
+            <ul class="nav-links">
+                <li><a href="#catalogo">Catálogo</a></li>
+                <li><a href="#pedido">Tu Pedido</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Sección 1: Hero y Presentación -->
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-content">
+                <h1 id="hero-title">Quito Coffee Roasters</h1>
+                <p class="tagline">Café artesanal de especialidad desde el Centro Histórico de Quito.</p>
+                
+                <div class="widgets-container">
+                    <div id="clima-widget" class="widget" aria-live="polite">
+                        <p>Cargando clima de Quito...</p>
+                    </div>
+                    <div id="frase-widget" class="widget">
+                        <p class="quote">"Detrás de cada taza de café hay una gran historia."</p>
+                        <small>- Frase del Día</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN CREATIVA 1: Coffee Matchmaker -->
+        <section id="matchmaker" aria-labelledby="match-title" class="matchmaker-section">
+            <div class="matchmaker-wrapper">
+                <h2 id="match-title">✨ Encuentra tu Café Ideal</h2>
+                <p class="match-subtitle">Responde estas preguntas y nuestro tostador estrella elegirá por ti.</p>
+                
+                <div id="quiz-paso1">
+                    <p class="quiz-pregunta">1. ¿Qué perfil de sabor prefieres en tu taza?</p>
+                    <button class="quiz-btn" onclick="seleccionarSabor('dulce')">Frutal y Dulce 🍓</button>
+                    <button class="quiz-btn" onclick="seleccionarSabor('fuerte')">Fuerte y Achocolatado 🍫</button>
+                </div>
+
+                <div id="quiz-paso2" style="display: none;">
+                    <p class="quiz-pregunta">2. ¿Qué nivel de intensidad buscas hoy?</p>
+                    <button class="quiz-btn" onclick="recomendarCafe('suave')">Suave y ligero ☕</button>
+                    <button class="quiz-btn" onclick="recomendarCafe('intenso')">Intenso y con cuerpo 💪</button>
+                </div>
+
+                <div id="quiz-resultado" style="display: none;">
+                    <h3 class="resultado-titulo"> ¡Tu café ideal es!</h3>
+                    <h4 id="recomendado-nombre"></h4>
+                    <p id="recomendado-desc"></p>
+                    <div class="quiz-resultado-acciones">
+                        <button id="btn-agregar-recomendado" class="btn-success">¡Agregar al pedido!</button>
+                        <button onclick="reiniciarQuiz()" class="btn-secundario">Empezar de nuevo</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 2: Catálogo de Cafés -->
+        <section id="catalogo" aria-labelledby="catalogo-title">
+            <h2 id="catalogo-title">Nuestro Catálogo de Especialidad</h2>
+            
+            <div class="filtros-barra">
+                <input type="text" id="buscar-nombre" placeholder="Buscar por nombre..." aria-label="Buscar café por nombre">
+                <select id="filtrar-origen" aria-label="Filtrar por origen">
+                    <option value="todos">Todos los orígenes</option>
+                    <option value="Ecuador">Ecuador</option>
+                    <option value="Colombia">Colombia</option>
+                    <option value="Brasil">Brasil</option>
+                    <option value="Etiopía">Etiopía</option>
+                </select>
+            </div>
+
+            <div id="productos-grid" class="grid-layout">
+                <!-- Se renderiza dinámicamente -->
+            </div>
+        </section>
+
+        <!-- Sección 3: Calculadora de Pedido -->
+        <section id="pedido" aria-labelledby="pedido-title">
+            <h2 id="pedido-title">Calculadora de Pedido</h2>
+            <div class="pedido-container">
+                <div class="carrito-lista">
+                    <h3>Tu Carrito</h3>
+                    <ul id="items-carrito">
+                        <li class="empty-cart">El carrito está vacío. Agrega cafés del catálogo.</li>
+                    </ul>
+                </div>
+                
+                <div class="resumen-calculo">
+                    <h3>Resumen y Envío</h3>
+                    <label for="zona-envio">Zona de entrega en Quito:</label>
+                    <select id="zona-envio">
+                        <option value="0" data-costo="0">Selecciona una zona...</option>
+                        <option value="norte" data-costo="2.50">Norte ($2.50)</option>
+                        <option value="centro" data-costo="1.80">Centro ($1.80)</option>
+                        <option value="sur" data-costo="3.00">Sur ($3.00)</option>
+                        <option value="valles" data-costo="3.50">Valles ($3.50)</option>
+                    </select>
+
+                    <div class="totales">
+                        <p>Subtotal: <span id="subtotal-val">$0.00</span></p>
+                        <p>Envío: <span id="envio-val">$0.00</span></p>
+                        <hr>
+                        <p class="total-destacado">Total: <span id="total-val">$0.00</span></p>
+                        <p class="cambio-moneda" id="total-eur">Total aproximado: €0.00 EUR</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 4: Formulario de Contacto -->
+        <section id="contacto" aria-labelledby="contacto-title">
+            <h2 id="contacto-title">Contáctanos</h2>
+            <form id="form-contacto" novalidate>
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo:</label>
+                    <input type="text" id="nombre" required minlength="3">
+                    <span class="error-msg" id="error-nombre"></span>
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo Electrónico:</label>
+                    <input type="email" id="email" required>
+                    <span class="error-msg" id="error-email"></span>
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Teléfono:</label>
+                    <input type="tel" id="telefono" required pattern="^[0-9]{9,10}$">
+                    <span class="error-msg" id="error-telefono"></span>
+                </div>
+                <div class="form-group">
+                    <label for="mensaje">Mensaje:</label>
+                    <textarea id="mensaje" required minlength="10"></textarea>
+                    <span class="error-msg" id="error-mensaje"></span>
+                </div>
+                <button type="submit">Enviar Mensaje</button>
+                <div id="form-success" class="hidden-msg" role="alert"></div>
+            </form>
+        </section>
+    </main>
+
+    <!-- Sección 5: Footer -->
+    <footer>
+        <div class="footer-content">
+            <div>
+                <h3>Horarios de Atención</h3>
+                <p>Lunes a Viernes: 08:00 - 19:00</p>
+                <p>Sábados: 09:00 - 17:00</p>
+            </div>
+            <div>
+                <h3>Contacto</h3>
+                <p>📍 Centro Histórico, Quito</p>
+                <p>📞 (02) 605 5550</p>
+            </div>
+            <div>
+                <h3>Síguenos</h3>
+                <p><a href="#">Instagram</a> | <a href="#">Facebook</a></p>
+            </div>
+        </div>
+        <hr>
+        <p class="creditos">&copy; 2026 Quito Coffee Roasters. Desarrollado con fines de certificación.</p>
+    </footer>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
